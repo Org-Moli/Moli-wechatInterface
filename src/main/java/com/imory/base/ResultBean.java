@@ -1,5 +1,7 @@
 package com.imory.base;
 
+import java.util.Map;
+
 /**
  * <p>名称</p>
  * <p/>
@@ -16,6 +18,18 @@ public class ResultBean {
     private String resultCode;
 
     private String resultMsg;
+
+    private Map<String,Object> resultMap;
+
+    public Map<String, Object> getResultMap()
+    {
+        return resultMap;
+    }
+
+    public void setResultMap(Map<String, Object> resultMap)
+    {
+        this.resultMap = resultMap;
+    }
 
     public boolean getSuccess()
     {

@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>名称</p>
@@ -30,17 +32,14 @@ public class UserBaseController {
     private UserBaseMapper userBaseMapper;
 
     @RequestMapping("/login")
-    public UserBase login(String mobile, String yzmCode, Integer captchaId)
+    public ResultBean login(String mobile, String yzmCode, Integer captchaId)
     {
+        Map<String,Object> resultMap = new HashMap<>();
         //验证验证码
         ResultBean resultBean = PhoneCaptchaUtils.checkCode(captchaId, yzmCode, mobile);
         if (!resultBean.getSuccess())
         {
-            UserBase userBase = new UserBase();
-            userBase.setResultCode(resultBean.getResultCode());
-            userBase.setSuccess(resultBean.getSuccess());
-            userBase.setResultMsg(resultBean.getResultMsg());
-            return userBase;
+            return resultBean;
         }
 
         //查询用户是否已存在
@@ -51,19 +50,20 @@ public class UserBaseController {
         if (userBaseList != null && userBaseList.size() > 0)
         {
             UserBase userBase = userBaseList.get(0);
-            userBase.setSuccess(true);
-            userBase.setResultCode("0000");
-            return userBase;
+            resultMap.put("userBase",userBase);
+            resultBean.setResultMap(resultMap);
+            return resultBean;
         }
         UserBase userBase = new UserBase();
         userBase.setUser_name(mobile);
         userBase.setMobile(mobile);
         userBase.setPassword(Md5Utils.EncoderByMd5("123qwe"));
         userBase.setStatus(1);
-        userBase.setSuccess(true);
-        userBase.setResultCode("0000");
         userBase.setCreate_time(new Date());
         userBaseMapper.insert(userBase);
-        return userBase;
+
+        resultMap.put("userBase",userBase);
+        resultBean.setResultMap(resultMap);
+        return resultBean;
     }
 }
