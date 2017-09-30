@@ -57,4 +57,23 @@ public class ProductInfoController {
         return resultBean;
     }
 
+    @RequestMapping("/productDetail")
+    public ResultBean productDetail(Integer productId)
+    {
+        ResultBean resultBean = new ResultBean();
+        Product product = productMapper.selectByPrimaryKey(productId);
+        if (product == null)
+        {
+            resultBean.setSuccess(false);
+            resultBean.setResultMsg("商品不存在");
+            resultBean.setResultCode("9999");
+            return resultBean;
+        }
+        Map resultMap = new HashMap();
+        resultMap.put("product", product);
+        resultBean.setSuccess(true);
+        resultBean.setResultCode("0000");
+        resultBean.setResultMap(resultMap);
+        return resultBean;
+    }
 }
