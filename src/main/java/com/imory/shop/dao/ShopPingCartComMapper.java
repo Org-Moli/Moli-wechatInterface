@@ -2,6 +2,7 @@ package com.imory.shop.dao;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,10 @@ public interface ShopPingCartComMapper {
             "pd.product_name,pd.price,pd.picture_url,pd.market_price",
             "from shoppingcart sc",
             "left join product pd on sc.product_id = pd.product_id",
-            "where sc.is_product_exists = 1"
+            "where sc.is_product_exists = 1 and sc.user_id = #{userId}"
     })
-    List<Map<String,Object>> cartDetail(@Param("userId") Integer userId);
+    List<Map<String, Object>> cartDetail(@Param("userId") Integer userId);
+
+    @SelectProvider(type = ShopPingCartComSqlProvider.class, method = "orderCart")
+    List<Map<String, Object>> orderCart(String ids);
 }

@@ -70,4 +70,18 @@ public class ShopPingCartController {
         resultBean.setResultMsg("更新购物车信息成功");
         return resultBean;
     }
+
+    @RequestMapping("/orderCart")
+    public ResultBean orderCart(String ids)
+    {
+        List<Map<String,Object>> shopPingCartList = shopPingCartComMapper.orderCart(ids);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("shopPingCartList", shopPingCartList);
+        ResultBean resultBean = new ResultBean();
+        resultBean.setResultCode("0000");
+        resultBean.setSuccess(true);
+        resultBean.setResultMsg("查询购物车信息成功");
+        resultBean.setResultMap(resultMap);
+        return resultBean;
+    }
 }
